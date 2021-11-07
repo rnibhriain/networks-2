@@ -8,3 +8,9 @@
 /Subscriber.class
 /Broker$Subscriber.class
 /SenderReceiver.class
+/Controller.class
+/PacketContent.class
+/Router.class
+/RoutingKey.class
+/StringContent.class
+/User.class

@@ -13,9 +13,7 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class SenderReceiver {
-
-	static DatagramSocket socket;
+public abstract class SenderReceiver {
 
 	public static final int DEFAULT_PORT= 51510;
 
@@ -23,25 +21,25 @@ public class SenderReceiver {
 	static final byte TYPE_ID = 1;
 	static final byte TYPE_COMB = 9;
 	
+	static final String END_USER_1 = "e1";
+	static final String END_USER_2 = "e2";
+	
+	public static final String ROUTER_1 = "r1";
+	public static final String ROUTER_2= "r2";
+	public static final String ROUTER_3 = "r3";
+	
+	public static final int ROUTE_ID_1 = 1; //ROUTE_ID_1 is when E1 sends packet to E2
+	public static final int ROUTE_ID_2 = 2; //ROUTE_ID_2 is when E2 sends packet to E1
+	
+	public static final int CONTROLLER_PORT = 50000;
+	
+	DatagramSocket socket;
+	
 	final static int MTU = 1500;
 	
-
-	SenderReceiver (DatagramSocket socket) { 
-		this.socket = socket;
-	}
+	public abstract void onReceipt(DatagramPacket packet) throws IOException, InterruptedException, Exception;
 	
-	public static void send (int type, String message, InetSocketAddress dstAddress) {
-		byte [] array = packPacket(type, message);
-		DatagramPacket packet = new DatagramPacket(array, array.length);
-		packet.setSocketAddress(dstAddress);
-		try {
-			socket.send(packet);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public static void receive () {
+	public void receive () {
 
 		DatagramPacket packet;
 
@@ -54,39 +52,12 @@ public class SenderReceiver {
 			packet= new DatagramPacket(buffer, buffer.length);
 			socket.receive(packet);
 
-			buffer= packet.getData();
-			bstream= new ByteArrayInputStream(buffer);
-			ostream= new ObjectInputStream(bstream);
-
-			String data =  ostream.readUTF();
-			
-			System.out.println("System received: " + data);
+			onReceipt(packet);
 		}
 		catch(Exception e) {
 			e.printStackTrace();
 		}
 
-	}
-
-
-	public static byte [] packPacket (int type, String message) {
-		byte [] data = null;
-		DatagramPacket packet = null;
-		ObjectOutputStream ostream;
-		ByteArrayOutputStream bstream;
-		byte[] buffer = null;
-		String finalData = type + ":" + message.length() + ":" + message;
-		try {
-			bstream= new ByteArrayOutputStream();
-			ostream= new ObjectOutputStream(bstream);
-			ostream.writeUTF(finalData);
-			ostream.flush();
-			buffer= bstream.toByteArray();
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-		}
-		return buffer;
 	}
 
 }
