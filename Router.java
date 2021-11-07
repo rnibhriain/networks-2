@@ -41,16 +41,17 @@ public class Router extends SenderReceiver{
 		this.routingTable = new HashMap<String, RoutingKey>();
 		this.distanceMap = new HashMap<Integer, Integer>();
 		try {
-			socket= new DatagramSocket();
+			socket= new DatagramSocket(51510);
 		}
 		catch (SocketException e) {
 			e.printStackTrace();
 		}
 		node = name;
+		start();
 		receive();
 	}
 
-	public synchronized void start() throws Exception {
+	public synchronized void start() {
 		System.out.println("Initialising routing map at router (" + this.port + ")...");
 		this.initialiseRoutingMap();
 
@@ -58,7 +59,6 @@ public class Router extends SenderReceiver{
 		this. printRoutingMap();
 
 		System.out.println("\nWaiting for contact at router(" + this.port + ")...");
-		this.wait();
 	}
 
 	// hard coded from e1 - r1 -r2 - e2
