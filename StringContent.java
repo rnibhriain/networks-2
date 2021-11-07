@@ -26,7 +26,7 @@ public class StringContent implements PacketContent {
 		dstAddress = dst;
 		String msg = "";
 		for (int i = 2 + length; i < buffer.length; i++) {
-			msg += buffer[i];
+		//	msg += buffer[i];
 		}
 		message = msg;
 	}
