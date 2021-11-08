@@ -99,7 +99,7 @@ public class Router extends SenderReceiver{
 
 		//If router has routing knowledge of how to get to destination, send packet to next router
 		if(this.routingTable.get(content.dstAddress).nextDst != null){
-			System.out.println("Router knows how to get to destination...");
+			System.out.println("Router knows how to get to destination..." + this.routingTable.get(content.dstAddress).nextDst);
 			content.incrementHopCount();
 			RoutingKey key = routingTable.get(content.dstAddress);
 			String nextHop = key.nextDst;
