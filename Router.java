@@ -67,14 +67,16 @@ public class Router extends SenderReceiver{
 
 		//Initialise the distanceMap table for the router
 		switch(this.node) {
+		
 		//For router 1 do this
 		case ROUTER_1:
-			this.routingTable.put(END_USER_1, new RoutingKey(0,"R2"));
-			this.routingTable.put(END_USER_2, new RoutingKey(0,"E1"));
+			this.routingTable.put(END_USER_1, new RoutingKey(0,"e1"));
+			this.routingTable.put(END_USER_2, new RoutingKey(0,"r2"));
+			
 			//For router 2 do this
 		case ROUTER_2:
-			this.routingTable.put(END_USER_1, new RoutingKey(0,"E2"));
-			this.routingTable.put(END_USER_2, new RoutingKey(0,"R1"));
+			this.routingTable.put(END_USER_1, new RoutingKey(0,"e2"));
+			this.routingTable.put(END_USER_2, new RoutingKey(0,"r1"));
 		}
 	}
 
@@ -82,7 +84,7 @@ public class Router extends SenderReceiver{
 		try {
 
 			System.out.println("\nPacket recieved at router (" + this.port + ")...");
-
+			
 
 			this.messagePacket = packet;
 			continueTransmission(packet);
