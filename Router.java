@@ -89,6 +89,10 @@ public class Router extends SenderReceiver{
 			
 
 			this.messagePacket = packet;
+			
+			StringContent content = new StringContent(packet);
+			System.out.println(node + " received: " + content.message);
+			
 			continueTransmission(packet);
 		}
 		catch(Exception e) {e.printStackTrace();}
