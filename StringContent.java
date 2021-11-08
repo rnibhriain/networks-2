@@ -36,7 +36,7 @@ public class StringContent implements PacketContent {
 		hops = Character.getNumericValue(array[2+length]);
 		String msg = "";
 		for (int i = 3 + length ; i < array.length; i++) {
-			msg += buffer[i];
+			msg += array[i];
 		}
 		message = msg;
 	}
