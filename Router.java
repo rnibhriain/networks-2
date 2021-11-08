@@ -73,10 +73,10 @@ public class Router extends SenderReceiver{
 			this.routingTable.put(END_USER_1, new RoutingKey(0,"e1"));
 			this.routingTable.put(END_USER_2, new RoutingKey(0,"r2"));
 			
-			//For router 2 do this
+		//For router 2 do this
 		case ROUTER_2:
-			this.routingTable.put(END_USER_1, new RoutingKey(0,"e2"));
-			this.routingTable.put(END_USER_2, new RoutingKey(0,"r1"));
+			this.routingTable.put(END_USER_1, new RoutingKey(0,"r1"));
+			this.routingTable.put(END_USER_2, new RoutingKey(0,"e2"));
 		}
 	}
 
