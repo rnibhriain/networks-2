@@ -25,7 +25,8 @@ public class User extends SenderReceiver{
 		try {
 
 			System.out.println("\nPacket recieved at user (" + node + ")...");
-
+			StringContent content = new StringContent(packet);
+			System.out.println(node + " received: " + content.message);
 
 		}
 		catch(Exception e) {e.printStackTrace();}

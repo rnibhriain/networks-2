@@ -13,7 +13,7 @@ public class StringContent implements PacketContent {
 	int length;
 	String dstAddress;
 	String message;
-	byte hops;
+	int hops;
 	
 	StringContent (DatagramPacket packet) throws IOException {
 		ObjectInputStream ostream;
@@ -33,9 +33,10 @@ public class StringContent implements PacketContent {
 			dst += array[i];
 		}
 		dstAddress = dst;
+		hops = Character.getNumericValue(array[2+length]);
 		String msg = "";
-		for (int i = 2 + length; i < array.length; i++) {
-		//	msg += buffer[i];
+		for (int i = 3 + length ; i < array.length; i++) {
+			msg += buffer[i];
 		}
 		message = msg;
 	}
