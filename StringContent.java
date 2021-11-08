@@ -9,23 +9,32 @@ import java.io.ObjectOutputStream;
 
 public class StringContent implements PacketContent {
 	
-	byte type;
-	byte length;
+	int type;
+	int length;
 	String dstAddress;
 	String message;
 	byte hops;
 	
-	StringContent (DatagramPacket packet) {
-		byte [] buffer= packet.getData();
-		type = buffer[0];
-		length = buffer[1];
+	StringContent (DatagramPacket packet) throws IOException {
+		ObjectInputStream ostream;
+		ByteArrayInputStream bstream;
+		byte[] buffer;
+		// extract data from packet
+		buffer= packet.getData();
+		bstream= new ByteArrayInputStream(buffer);
+		ostream= new ObjectInputStream(bstream);
+		
+		message = ostream.readUTF();
+		char [] array = message.toCharArray();
+		type = Character.getNumericValue(array[0]);
+		length = Character.getNumericValue(array[1]);
 		String dst = "";
-		for (int i = 0; i < length; i++) {
-			dst += buffer[i+2];
+		for (int i = 2; i < length+2; i++) {
+			dst += array[i];
 		}
 		dstAddress = dst;
 		String msg = "";
-		for (int i = 2 + length; i < buffer.length; i++) {
+		for (int i = 2 + length; i < array.length; i++) {
 		//	msg += buffer[i];
 		}
 		message = msg;

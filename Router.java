@@ -48,7 +48,16 @@ public class Router extends SenderReceiver{
 		}
 		node = name;
 		start();
-		receive();
+		try {
+			continueTransmission(null);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//receive();
 	}
 
 	public synchronized void start() {
@@ -92,7 +101,24 @@ public class Router extends SenderReceiver{
 
 	public void continueTransmission(DatagramPacket packet) throws IOException, InterruptedException {
 
-		StringContent content = new StringContent(packet);
+		DatagramPacket packet1 = null;
+		ObjectOutputStream ostream;
+		ByteArrayOutputStream bstream;
+		byte[] buffer = null;
+		try {
+			bstream= new ByteArrayOutputStream();
+			ostream= new ObjectOutputStream(bstream);
+			ostream.writeUTF("12e20hello");
+			ostream.flush();
+			buffer= bstream.toByteArray();
+			packet1 = new DatagramPacket(buffer, buffer.length);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		} 
+		
+		
+		StringContent content = new StringContent(packet1);
 
 		//If router has routing knowledge of how to get to destination, send packet to next router
 		if(this.routingTable.get(content.dstAddress).nextDst != null){

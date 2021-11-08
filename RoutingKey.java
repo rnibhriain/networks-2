@@ -1,7 +1,7 @@
 public class RoutingKey {
 
 	int hops;
-	String nextDst;
+	String nextDst ="";
 
 	// Initialising the Routing key
 	public RoutingKey(int hopCount, String nextDest) {
