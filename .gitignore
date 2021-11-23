@@ -14,3 +14,5 @@
 /RoutingKey.class
 /StringContent.class
 /User.class
+/AckPacket.class
+/ControllerPacket.class

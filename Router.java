@@ -55,47 +55,87 @@ public class Router extends SenderReceiver{
 		System.out.println("Initialising routing map at router (" + this.port + ")...");
 		this.initialiseRoutingMap();
 
-		System.out.println("Printing maps at router (" + this.port + ")...\n");
-		this. printRoutingMap();
-
 		System.out.println("\nWaiting for contact at router(" + this.port + ")...");
 	}
-
-	// hard coded from e1 - r1 -r2 - e2
-	// and from e2 - r2 - r1 - e1
-	public void initialiseRoutingMap() {
-
-		//Initialise the distanceMap table for the router
-		switch(this.node) {
-		
-		//For router 1 do this
-		case ROUTER_1:
-			this.routingTable.put(END_USER_1, new RoutingKey(0,"e1"));
-			this.routingTable.put(END_USER_2, new RoutingKey(0,"r2"));
-			break;
-			
-		//For router 2 do this
-		case ROUTER_2:
-			this.routingTable.put(END_USER_1, new RoutingKey(0,"r1"));
-			this.routingTable.put(END_USER_2, new RoutingKey(0,"e2"));
-			break;
+	
+	public void send (String message) {
+		InetSocketAddress dstAddress = new InetSocketAddress("controller", 51510);
+		message += ":" + this.node;
+		DatagramPacket packet = null;
+		ObjectOutputStream ostream;
+		ByteArrayOutputStream bstream;
+		byte[] buffer = null;
+		try {
+			bstream= new ByteArrayOutputStream();
+			ostream= new ObjectOutputStream(bstream);
+			ostream.writeUTF(message);
+			ostream.flush();
+			buffer= bstream.toByteArray();
+			packet = new DatagramPacket(buffer, buffer.length);
+			packet.setSocketAddress(dstAddress);
+			socket.send(packet);
 		}
+		catch(Exception e) {
+			e.printStackTrace();
+		} 
+		
+	}
+
+	public void initialiseRoutingMap() {
+		
+		System.out.println("Initial hello to controller");
+		
+		InitialPacket hello = new InitialPacket(this.node);
+		DatagramPacket packet = hello.toDatagramPacket();
+		InetSocketAddress dst = new InetSocketAddress("controller", CONTROLLER_PORT);
+		packet.setSocketAddress(dst);
+		try {
+			socket.send(packet);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	public void onReceipt(DatagramPacket packet) {
-		try {
+		
+		byte [] buffer = packet.getData();
 
-			System.out.println("\nPacket recieved at router (" + this.port + ")...");
-			
+		switch (buffer[0]) {
 
-			this.messagePacket = packet;
-			
-			StringContent content = new StringContent(packet);
-			System.out.println(node + " received: " + content.message);
-			
-			continueTransmission(packet);
+		// in the case that it is an string packet
+		case PACKET_TYPE_STRING:
+			try {
+
+				System.out.println("\nPacket recieved at router (" + this.port + ")...");
+				
+
+				this.messagePacket = packet;
+				
+				StringContent content = new StringContent(packet);
+				System.out.println(node + " received: " + content.message);
+				
+				continueTransmission(packet);
+			}
+			catch(Exception e) {e.printStackTrace();}
+			break;
+
+		// in the case it is an update packet
+		case PACKET_TYPE_CONTROLLER:
+
+			ControllerPacket current = new ControllerPacket(packet);
+			String [] table = current.toString().split(":");
+			this.routingTable.put(table[0], new RoutingKey(0,table[1]));
+			System.out.println("Printing maps at router (" + this.port + ")...\n");
+			this.printRoutingMap();
+			break;
+
+		// otherwise mistaken
+		default:
+			System.out.println("received mistaken packet");		
 		}
-		catch(Exception e) {e.printStackTrace();}
+		
+		
 	}
 
 	public void continueTransmission(DatagramPacket packet) throws IOException, InterruptedException {
@@ -116,7 +156,7 @@ public class Router extends SenderReceiver{
 			updatedPacket.setSocketAddress(nextAddr);
 			socket.send(updatedPacket);
 
-			if(nextHop == END_USER_1 || nextHop == END_USER_2)
+			if(nextHop == END_USER_1 || nextHop == END_USER_2 || nextHop == END_USER_3 || nextHop == END_USER_4)
 				System.out.println("\nPacket sent to end user(" + nextHop + ")...");
 			else
 				System.out.println("\nPacket sent to next router(" + nextHop + ")...");

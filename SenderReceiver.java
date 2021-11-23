@@ -17,21 +17,29 @@ public abstract class SenderReceiver {
 
 	public static final int DEFAULT_PORT= 51510;
 
-	static final byte TYPE_UNKNOWN = 0;
-	static final byte TYPE_ID = 1;
-	static final byte TYPE_COMB = 9;
+	// types of headers - i.e. address types
+	static final byte TYPE_ID = 1;			// "r1"
+	static final byte TYPE_COMB = 2;		// "scss.tcd"
 	
 	static final String END_USER_1 = "e1";
 	static final String END_USER_2 = "e2";
+	static final String END_USER_3 = "e3";
+	static final String END_USER_4 = "e4";
 	
 	public static final String ROUTER_1 = "r1";
 	public static final String ROUTER_2= "r2";
 	public static final String ROUTER_3 = "r3";
 	
-	public static final int ROUTE_ID_1 = 1; //ROUTE_ID_1 is when E1 sends packet to E2
-	public static final int ROUTE_ID_2 = 2; //ROUTE_ID_2 is when E2 sends packet to E1
-	
 	public static final int CONTROLLER_PORT = 50000;
+	
+	public static final byte PACKET_TYPE_LENGTH = 4;
+	
+	// packet types
+	public static final byte PACKET_TYPE_ACK = 0;
+	public static final byte PACKET_TYPE_HELLO = 1;
+	public static final byte PACKET_TYPE_CONTROLLER = 2;
+	public static final byte PACKET_TYPE_UPDATE = 3;
+	public static final byte PACKET_TYPE_STRING = 4;
 	
 	DatagramSocket socket;
 	
