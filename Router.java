@@ -161,6 +161,16 @@ public class Router extends SenderReceiver{
 			else
 				System.out.println("\nPacket sent to next router(" + nextHop + ")...");
 			System.out.println("\nWaiting for contact at router(" + this.port + ")...");
+		} 
+		
+		// else send an update request
+		else {
+			InetSocketAddress dst = new InetSocketAddress("controller", CONTROLLER_PORT);
+			UpdateRequest request = new UpdateRequest(this.node, content.dstAddress);
+			DatagramPacket pack = request.toDatagramPacket();
+			pack.setSocketAddress(dst);
+			socket.send(pack);
+			receive();
 		}
 
 	}

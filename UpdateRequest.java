@@ -45,7 +45,7 @@ public class UpdateRequest implements PacketContent {
 	// this should be of type update
 	byte packetType;
 
-	public UpdateRequest (String nxt, String dst) {
+	public UpdateRequest (String rout, String dst) {
 		// all routers have address type "rx"
 		dstType = 0;
 
@@ -59,8 +59,8 @@ public class UpdateRequest implements PacketContent {
 		// all routers have address type "rx"
 		routerType = 0;
 
-		routerLength = (byte) nxt.length();
-		array = nxt.toCharArray();
+		routerLength = (byte) rout.length();
+		array = rout.toCharArray();
 		this.router = new byte [array.length];
 		for (int i = 0; i < routerLength; i++) {
 			this.router [i] = (byte)array[i];
