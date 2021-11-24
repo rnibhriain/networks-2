@@ -140,7 +140,7 @@ public class Controller extends SenderReceiver {
 		case PACKET_TYPE_HELLO:
 			InitialPacket pack = new InitialPacket(packet);
 			System.out.println("Received hello from: " + pack.toString());
-			sendOn(CONTROLLER);
+			sendOn(pack.toString());
 			break;
 
 		// in the case it is an update packet

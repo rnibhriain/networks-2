@@ -55,7 +55,7 @@ public class Router extends SenderReceiver{
 
 	public synchronized void start() {
 		System.out.println("Initialising routing map at router (" + this.port + ")...");
-		this.initialiseRoutingMap();
+		initialiseRoutingMap();
 
 		System.out.println("\nWaiting for contact at router(" + this.port + ")...");
 	}
@@ -168,7 +168,7 @@ public class Router extends SenderReceiver{
 
 		// else send an update request
 		else {
-			InetSocketAddress dst = new InetSocketAddress("controller", CONTROLLER_PORT);
+			InetSocketAddress dst = new InetSocketAddress(CONTROLLER, CONTROLLER_PORT);
 			UpdateRequest request = new UpdateRequest(this.node, content.dstAddress);
 			DatagramPacket pack = request.toDatagramPacket();
 			pack.setSocketAddress(dst);
