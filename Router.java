@@ -59,7 +59,7 @@ public class Router extends SenderReceiver{
 
 		System.out.println("\nWaiting for contact at router(" + this.port + ")...");
 	}
-	
+
 	public void send (String message) {
 		InetSocketAddress dstAddress = new InetSocketAddress("controller", 51510);
 		message += ":" + this.node;
@@ -80,32 +80,28 @@ public class Router extends SenderReceiver{
 		catch(Exception e) {
 			e.printStackTrace();
 		} 
-		
+
 	}
 
 	public void initialiseRoutingMap() {
-		
+
 		System.out.println("Initial hello to controller");
-		
+
 		InitialPacket hello = new InitialPacket(this.node);
 		DatagramPacket packet = hello.toDatagramPacket();
 		InetSocketAddress dst =  null;
-		try {
-			dst = new InetSocketAddress(CONTROLLER, CONTROLLER_PORT);
-		} catch (UnknownHostException e1) {
-			e1.printStackTrace();
-		}
+		dst = new InetSocketAddress(CONTROLLER, CONTROLLER_PORT);
 		packet.setSocketAddress(dst);
 		try {
 			socket.send(packet);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	public void onReceipt(DatagramPacket packet) {
-		
+
 		byte [] buffer = packet.getData();
 
 		switch (buffer[0]) {
@@ -115,19 +111,19 @@ public class Router extends SenderReceiver{
 			try {
 
 				System.out.println("\nPacket recieved at router (" + this.port + ")...");
-				
+
 
 				this.messagePacket = packet;
-				
+
 				StringContent content = new StringContent(packet);
 				System.out.println(node + " received: " + content.message);
-				
+
 				continueTransmission(packet);
 			}
 			catch(Exception e) {e.printStackTrace();}
 			break;
 
-		// in the case it is an update packet
+			// in the case it is an update packet
 		case PACKET_TYPE_CONTROLLER:
 
 			ControllerPacket current = new ControllerPacket(packet);
@@ -137,17 +133,17 @@ public class Router extends SenderReceiver{
 			this.printRoutingMap();
 			break;
 
-		// otherwise mistaken
+			// otherwise mistaken
 		default:
 			System.out.println("received mistaken packet");		
 		}
-		
-		
+
+
 	}
 
 	public void continueTransmission(DatagramPacket packet) throws IOException, InterruptedException {
-		
-		
+
+
 		StringContent content = new StringContent(packet);
 
 		//If router has routing knowledge of how to get to destination, send packet to next router
@@ -169,7 +165,7 @@ public class Router extends SenderReceiver{
 				System.out.println("\nPacket sent to next router(" + nextHop + ")...");
 			System.out.println("\nWaiting for contact at router(" + this.port + ")...");
 		} 
-		
+
 		// else send an update request
 		else {
 			InetSocketAddress dst = new InetSocketAddress("controller", CONTROLLER_PORT);
@@ -208,8 +204,8 @@ public class Router extends SenderReceiver{
 		System.out.println("Enter the name of the router: ");
 		String name = scanner.next();
 		Router router = new Router(name);
-		
-		
+
+
 	}
 
 }
