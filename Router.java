@@ -53,10 +53,10 @@ public class Router extends SenderReceiver{
 	}
 
 	public synchronized void start() {
-		System.out.println("Initialising routing map at router (" + this.port + ")...");
+		System.out.println("Initialising routing map at router (" + this.node + ")...");
 		initialiseRoutingMap();
 
-		System.out.println("\nWaiting for contact at router(" + this.port + ")...");
+		System.out.println("\nWaiting for contact at router(" + this.node + ")...");
 	}
 
 	public void send (String message) {
@@ -114,7 +114,6 @@ public class Router extends SenderReceiver{
 				this.messagePacket = packet;
 
 				StringContent content = new StringContent(packet);
-				System.out.println(node + " received: " + content.message);
 
 				continueTransmission(packet);
 			}
@@ -145,10 +144,10 @@ public class Router extends SenderReceiver{
 		StringContent content = new StringContent(packet);
 
 		//If router has routing knowledge of how to get to destination, send packet to next router
-		if(this.routingTable.get(content.dstAddress).nextDst != null){
+		if(this.routingTable.get(content.getAddress()).nextDst != null){
 			System.out.println("Router knows how to get to destination..." + this.routingTable.get(content.dstAddress).nextDst);
 			content.incrementHopCount();
-			RoutingKey key = routingTable.get(content.dstAddress);
+			RoutingKey key = routingTable.get(content.getAddress());
 			String nextHop = key.nextDst;
 
 			//Set dst port of packet to that of the next router
@@ -167,7 +166,7 @@ public class Router extends SenderReceiver{
 		// else send an update request
 		else {
 			InetSocketAddress dst = new InetSocketAddress(CONTROLLER, CONTROLLER_PORT);
-			UpdateRequest request = new UpdateRequest(this.node, content.dstAddress);
+			UpdateRequest request = new UpdateRequest(this.node, content.getAddress());
 			DatagramPacket pack = request.toDatagramPacket();
 			pack.setSocketAddress(dst);
 			socket.send(packet);
