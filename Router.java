@@ -128,6 +128,15 @@ public class Router extends SenderReceiver{
 			this.routingTable.put(table[0], new RoutingKey(0,table[1]));
 			System.out.println("Printing maps at router (" + this.port + ")...\n");
 			this.printRoutingMap();
+			AckPacket hello = new AckPacket(this.node);
+			packet = hello.toDatagramPacket();
+			InetSocketAddress dst = new InetSocketAddress(CONTROLLER, CONTROLLER_PORT);
+			packet.setSocketAddress(dst);
+			try {
+				socket.send(packet);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			break;
 
 			// otherwise mistaken
@@ -170,9 +179,9 @@ public class Router extends SenderReceiver{
 			DatagramPacket pack = request.toDatagramPacket();
 			pack.setSocketAddress(dst);
 			socket.send(packet);
-			receive();
+			
 		}
-
+		receive();
 	}
 
 	public void printRoutingMap() {
