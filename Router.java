@@ -134,7 +134,7 @@ public class Router extends SenderReceiver{
 		default:
 			System.out.println("received mistaken packet");		
 		}
-
+		receive();
 
 	}
 
