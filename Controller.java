@@ -130,7 +130,7 @@ public class Controller extends SenderReceiver {
 
 		switch (buffer[0]) {
 
-		// in the case that it is an ackpacket
+		// in the case that it is an AckPacket
 		case PACKET_TYPE_ACK:
 			AckPacket ack = new AckPacket(packet);
 			System.out.println("Received ack from: " + ack.toString());
@@ -140,7 +140,7 @@ public class Controller extends SenderReceiver {
 		case PACKET_TYPE_HELLO:
 			InitialPacket pack = new InitialPacket(packet);
 			System.out.println("Received hello from: " + pack.toString());
-			sendOn(pack.toString());
+			sendOn(CONTROLLER);
 			break;
 
 		// in the case it is an update packet

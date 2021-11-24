@@ -29,10 +29,15 @@ public abstract class SenderReceiver {
 	public static final String ROUTER_1 = "r1";
 	public static final String ROUTER_2= "r2";
 	public static final String ROUTER_3 = "r3";
+	public static final String ROUTER_4 = "r4";
+	public static final String ROUTER_5= "r5";
+	public static final String ROUTER_6 = "r6";
+	public static final String ROUTER_7 = "r7";
+	public static final String ROUTER_8= "r8";
+	
+	public static final String CONTROLLER = "controller";
 	
 	public static final int CONTROLLER_PORT = 50000;
-	
-	public static final byte PACKET_TYPE_LENGTH = 4;
 	
 	// packet types
 	public static final byte PACKET_TYPE_ACK = 0;
@@ -65,7 +70,6 @@ public abstract class SenderReceiver {
 		catch(Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 
 }

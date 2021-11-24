@@ -13,7 +13,7 @@ public class User extends SenderReceiver{
 
 	User(String name) {
 		try {
-			socket= new DatagramSocket(51510);
+			socket= new DatagramSocket(51511);
 		}
 		catch (SocketException e) {
 			e.printStackTrace();

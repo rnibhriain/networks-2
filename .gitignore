@@ -16,3 +16,5 @@
 /User.class
 /AckPacket.class
 /ControllerPacket.class
+/InitialPacket.class
+/UpdateRequest.class

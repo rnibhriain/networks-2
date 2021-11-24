@@ -8,8 +8,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -87,7 +89,12 @@ public class Router extends SenderReceiver{
 		
 		InitialPacket hello = new InitialPacket(this.node);
 		DatagramPacket packet = hello.toDatagramPacket();
-		InetSocketAddress dst = new InetSocketAddress("controller", CONTROLLER_PORT);
+		InetSocketAddress dst =  null;
+		try {
+			dst = new InetSocketAddress(CONTROLLER, CONTROLLER_PORT);
+		} catch (UnknownHostException e1) {
+			e1.printStackTrace();
+		}
 		packet.setSocketAddress(dst);
 		try {
 			socket.send(packet);
@@ -169,7 +176,7 @@ public class Router extends SenderReceiver{
 			UpdateRequest request = new UpdateRequest(this.node, content.dstAddress);
 			DatagramPacket pack = request.toDatagramPacket();
 			pack.setSocketAddress(dst);
-			socket.send(pack);
+			socket.send(packet);
 			receive();
 		}
 
