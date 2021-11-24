@@ -28,7 +28,6 @@ public class Router extends SenderReceiver{
 	HashMap<Integer, Integer> distanceMap;
 
 	private int port = DEFAULT_PORT;
-	static final int CONTROLLER_PORT = 50001;
 	static final String CONTROLLER_NODE = "Controller";
 
 	private String node;
@@ -85,12 +84,11 @@ public class Router extends SenderReceiver{
 
 	public void initialiseRoutingMap() {
 
-		System.out.println("Initial hello to controller");
+		System.out.println("\nInitial hello to controller ... from " + this.node);
 
 		InitialPacket hello = new InitialPacket(this.node);
 		DatagramPacket packet = hello.toDatagramPacket();
-		InetSocketAddress dst =  null;
-		dst = new InetSocketAddress(CONTROLLER, CONTROLLER_PORT);
+		InetSocketAddress dst = new InetSocketAddress(CONTROLLER, CONTROLLER_PORT);
 		packet.setSocketAddress(dst);
 		try {
 			socket.send(packet);
