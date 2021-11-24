@@ -9,65 +9,79 @@ import java.io.ObjectOutputStream;
 
 public class StringContent implements PacketContent {
 	
-	int type;
-	int length;
-	String dstAddress;
-	String message;
-	int hops;
-	
-	StringContent (DatagramPacket packet) throws IOException {
-		ObjectInputStream ostream;
-		ByteArrayInputStream bstream;
-		byte[] buffer;
-		// extract data from packet
-		buffer= packet.getData();
-		bstream= new ByteArrayInputStream(buffer);
-		ostream= new ObjectInputStream(bstream);
-		
-		message = ostream.readUTF();
-		char [] array = message.toCharArray();
-		type = Character.getNumericValue(array[0]);
-		length = Character.getNumericValue(array[1]);
-		String dst = "";
-		for (int i = 2; i < length+2; i++) {
-			dst += array[i];
-		}
-		dstAddress = dst;
-		hops = Character.getNumericValue(array[2+length]);
-		String msg = "";
-		for (int i = 3 + length ; i < array.length; i++) {
-			msg += array[i];
-		}
-		message = msg;
-	}
+	byte type;
+	byte length;
+	byte hops;
+	byte [] address;
+	byte addressLength;
+	byte [] message;
 
+	public StringContent(DatagramPacket packet) {
+		byte [] buffer = packet.getData();
+		type = buffer[1];
+		addressLength = buffer[2];
+		address = new byte [addressLength];
+		System.arraycopy(buffer, 3, address, 0, addressLength);
+		System.arraycopy(buffer, 3+addressLength, message, 0, buffer.length-(addressLength+3));
+	}
+	
+	public StringContent (String address, String message) {
+		// all users have address type "ex"
+		type = 0;
+		hops = 0;
+		addressLength = (byte) address.length();
+		char [] array = address.toCharArray();
+		this.address = new byte [array.length];
+		for (int i = 0; i < addressLength; i++) {
+			this.address [i] = (byte)array[i];
+		}
+		array = message.toCharArray();
+		this.message = new byte [array.length];
+		for (int i = 0; i < this.message.length; i++) {
+			this.message [i] = (byte)array[i];
+		}
+	}
+	
+	public String getAddress () {
+		String string = "";
+		
+		for (int i = 0; i < addressLength; i++) {
+			string += (char) address[i];
+		}
+		
+		return string;
+	}
+	
+	public String toString () {
+		String string = "";
+		
+		for (int i = 0; i < addressLength; i++) {
+			string += (char) address[i];
+		}
+		string += ":";
+		for (int i = 0; i < message.length; i++) {
+			string += (char) message[i];
+		}
+		return string;
+	}
 
 	@Override
 	public DatagramPacket toDatagramPacket() {
+		byte [] buffer = new byte [address.length+3+message.length];
 		DatagramPacket packet = null;
-		byte [] data = null;
-		ObjectOutputStream ostream;
-		ByteArrayOutputStream bstream;
-		byte[] buffer = null;
-		String finalData = "" + type + length + dstAddress + hops + message;
+		buffer[0] = PACKET_TYPE_STRING;
+		buffer[1] = type;
+		buffer[2] = addressLength;
 		
-		try {
-			bstream= new ByteArrayOutputStream();
-			ostream= new ObjectOutputStream(bstream);
-			ostream.writeUTF(finalData);
-			ostream.flush();
-			buffer= bstream.toByteArray();
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-		}
+		// copies in the address
+		System.arraycopy(address, 0, buffer, 3, addressLength);
+		
+		// copies in the message
+		System.arraycopy(message, 0, buffer, 3+addressLength, message.length);
+		
 		packet = new DatagramPacket(buffer, buffer.length);
 		
 		return packet;
-	}
-	
-	public void incrementHopCount () {
-		hops++;
 	}
 
 }

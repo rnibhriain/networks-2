@@ -26,30 +26,10 @@ public class User extends SenderReceiver{
 
 			System.out.println("\nPacket recieved at user (" + node + ")...");
 			StringContent content = new StringContent(packet);
-			System.out.println(node + " received: " + content.message);
+			System.out.println(node + " received: " + content.toString());
 
 		}
 		catch(Exception e) {e.printStackTrace();}
-	}
-
-	public void send (String message, InetSocketAddress dstAddress) {
-		DatagramPacket packet = null;
-		ObjectOutputStream ostream;
-		ByteArrayOutputStream bstream;
-		byte[] buffer = null;
-		try {
-			bstream= new ByteArrayOutputStream();
-			ostream= new ObjectOutputStream(bstream);
-			ostream.writeUTF(message);
-			ostream.flush();
-			buffer= bstream.toByteArray();
-			packet = new DatagramPacket(buffer, buffer.length);
-			packet.setSocketAddress(dstAddress);
-			socket.send(packet);
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-		} 
 	}
 
 
@@ -61,11 +41,33 @@ public class User extends SenderReceiver{
 
 		System.out.println("Would you like to send or receive? ");
 		name = scanner.next();
-		if (name.equals("send") && user.node.equals("e1"))
-			user.send("12e20hello", new InetSocketAddress("r1", 51510));
-		else if (name.equals("send") && user.node.equals("e2"))
-			user.send("12e10hello", new InetSocketAddress("r2", 51510));
-		else if (name.equals("receive"))
+		System.out.println("Where would you like to send it? ");
+		String location = scanner.next();
+		
+		InetSocketAddress dst = null;
+		DatagramPacket packet = null;
+		
+		if (name.equals("send") && user.node.equals("e1")) {
+			dst = new InetSocketAddress("r1", 51510);
+			StringContent pack = new StringContent(location, "hello");
+			packet = pack.toDatagramPacket();
+			packet.setSocketAddress(dst);
+		} else if (name.equals("send") && user.node.equals("e2")) {
+			dst = new InetSocketAddress("r7", 51510);
+			StringContent pack = new StringContent(location, "hello");
+			packet = pack.toDatagramPacket();
+			packet.setSocketAddress(dst);
+		} else if (name.equals("send") && user.node.equals("e3")) {
+			dst = new InetSocketAddress("r5", 51510);
+			StringContent pack = new StringContent(location, "hello");
+			packet = pack.toDatagramPacket();
+			packet.setSocketAddress(dst);
+		} else if (name.equals("send") && user.node.equals("e4")) {
+			dst = new InetSocketAddress("r8", 51510);
+			StringContent pack = new StringContent(location, "hello");
+			packet = pack.toDatagramPacket();
+			packet.setSocketAddress(dst);
+		} else if (name.equals("receive"))
 			user.receive();
 
 	}

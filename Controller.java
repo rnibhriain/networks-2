@@ -153,6 +153,8 @@ public class Controller extends SenderReceiver {
 		default:
 			System.out.println("received mistaken packet");		
 		}
+		
+		receive();
 	}
 	
 	public void sendUpdate (String update) {
