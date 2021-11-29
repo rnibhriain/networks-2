@@ -32,6 +32,9 @@ public class User extends SenderReceiver{
 		catch(Exception e) {e.printStackTrace();}
 	}
 
+	public void send (InetSocketAddress dst, DatagramPacket packet) {
+		
+	}
 
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
@@ -41,33 +44,28 @@ public class User extends SenderReceiver{
 
 		System.out.println("Would you like to send or receive? ");
 		name = scanner.next();
-		System.out.println("Where would you like to send it? ");
-		String location = scanner.next();
-		
+
 		InetSocketAddress dst = null;
 		DatagramPacket packet = null;
-		
-		if (name.equals("send") && user.node.equals("e1")) {
-			dst = new InetSocketAddress("r1", 51510);
+
+		if (name.equals("send")) {
+			System.out.println("Where would you like to send it? ");
+			String location = scanner.next();
+			if (user.node.equals("e1")) {
+				dst = new InetSocketAddress("r1", 51510);
+			} else if (user.node.equals("e2")) {
+				dst = new InetSocketAddress("r7", 51510);
+			} else if (user.node.equals("e3")) {
+				dst = new InetSocketAddress("r5", 51510);
+			} else if (user.node.equals("e4")) {
+				dst = new InetSocketAddress("r8", 51510);
+			}
 			StringContent pack = new StringContent(location, "hello");
 			packet = pack.toDatagramPacket();
 			packet.setSocketAddress(dst);
-		} else if (name.equals("send") && user.node.equals("e2")) {
-			dst = new InetSocketAddress("r7", 51510);
-			StringContent pack = new StringContent(location, "hello");
-			packet = pack.toDatagramPacket();
-			packet.setSocketAddress(dst);
-		} else if (name.equals("send") && user.node.equals("e3")) {
-			dst = new InetSocketAddress("r5", 51510);
-			StringContent pack = new StringContent(location, "hello");
-			packet = pack.toDatagramPacket();
-			packet.setSocketAddress(dst);
-		} else if (name.equals("send") && user.node.equals("e4")) {
-			dst = new InetSocketAddress("r8", 51510);
-			StringContent pack = new StringContent(location, "hello");
-			packet = pack.toDatagramPacket();
-			packet.setSocketAddress(dst);
-		} else if (name.equals("receive"))
+			user.send(dst, packet);
+		}
+		else if (name.equals("receive"))
 			user.receive();
 
 	}

@@ -143,6 +143,9 @@ public class Router extends SenderReceiver{
 		default:
 			System.out.println("received mistaken packet");		
 		}
+		
+		System.out.println("\nWaiting for contact at router(" + this.node + ")...");
+
 		receive();
 
 	}
@@ -181,7 +184,6 @@ public class Router extends SenderReceiver{
 			socket.send(packet);
 			
 		}
-		receive();
 	}
 
 	public void printRoutingMap() {
