@@ -33,7 +33,11 @@ public class User extends SenderReceiver{
 	}
 
 	public void send (InetSocketAddress dst, DatagramPacket packet) {
-		
+		try {
+			socket.send(packet);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void main(String[] args) {
