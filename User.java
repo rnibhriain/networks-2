@@ -66,9 +66,9 @@ public class User extends SenderReceiver{
 			}
 			StringContent pack = new StringContent(location, "hello");
 			packet = pack.toDatagramPacket();
-			//packet.setSocketAddress(dst);
-			StringContent newp = new StringContent(packet);
-			//user.send(dst, packet);
+			packet.setSocketAddress(dst);
+			//StringContent newp = new StringContent(packet);
+			user.send(dst, packet);
 		}
 		else if (name.equals("receive"))
 			user.receive();
