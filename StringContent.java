@@ -21,6 +21,7 @@ public class StringContent implements PacketContent {
 		type = buffer[1];
 		addressLength = buffer[2];
 		address = new byte [addressLength];
+		message = new byte[buffer.length-(addressLength+3)];
 		System.arraycopy(buffer, 3, address, 0, addressLength);
 		System.arraycopy(buffer, 3+addressLength, message, 0, buffer.length-(addressLength+3));
 	}
