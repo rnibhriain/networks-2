@@ -157,7 +157,7 @@ public class Router extends SenderReceiver{
 		RoutingKey key = this.routingTable.get(content.getAddress());
 
 		//If router has routing knowledge of how to get to destination, send packet to next router
-		if(key.nextDst != null){
+		if(key != null){
 			System.out.println("Router knows how to get to destination..." + key.nextDst);
 			content.incrementHopCount();
 			key = routingTable.get(content.getAddress());
