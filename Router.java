@@ -154,12 +154,13 @@ public class Router extends SenderReceiver{
 
 
 		StringContent content = new StringContent(packet);
+		RoutingKey key = this.routingTable.get(content.getAddress());
 
 		//If router has routing knowledge of how to get to destination, send packet to next router
-		if(this.routingTable.get(content.getAddress()).nextDst != null){
-			System.out.println("Router knows how to get to destination..." + this.routingTable.get(content.getAddress()).nextDst);
+		if(key.nextDst != null){
+			System.out.println("Router knows how to get to destination..." + key.nextDst);
 			content.incrementHopCount();
-			RoutingKey key = routingTable.get(content.getAddress());
+			key = routingTable.get(content.getAddress());
 			String nextHop = key.nextDst;
 
 			//Set dst port of packet to that of the next router
