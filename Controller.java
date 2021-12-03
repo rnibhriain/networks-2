@@ -165,8 +165,11 @@ public class Controller extends SenderReceiver {
 		
 		String [] current = new String[2];
 		
-		for (int i = 0; i < list.size() && !current[1].equals(str[0]); i++) {
-			current = list.get(i).split(":");
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).split(":")[1].equals(str[0])) {
+				current = list.get(i).split(":");
+			}
+			
 		}	
 		
 		ControllerPacket pack = new ControllerPacket(current[1], current[0]);
