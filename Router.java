@@ -180,7 +180,7 @@ public class Router extends SenderReceiver{
 			UpdateRequest request = new UpdateRequest(this.node, content.getAddress());
 			DatagramPacket pack = request.toDatagramPacket();
 			pack.setSocketAddress(dst);
-			socket.send(packet);
+			socket.send(pack);
 			receive();
 			continueTransmission(messagePacket);
 		}
