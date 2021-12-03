@@ -24,8 +24,6 @@ public class Router extends SenderReceiver{
 	// <RoutingKey> object for counting hops and next address
 	HashMap<String, RoutingKey> routingTable;
 
-	// costs between addresses
-	HashMap<Integer, Integer> distanceMap;
 
 	private int port = DEFAULT_PORT;
 	static final String CONTROLLER_NODE = "Controller";
@@ -40,7 +38,6 @@ public class Router extends SenderReceiver{
 
 	Router (String name) {
 		this.routingTable = new HashMap<String, RoutingKey>();
-		this.distanceMap = new HashMap<Integer, Integer>();
 		try {
 			socket= new DatagramSocket(51510);
 		}
@@ -155,6 +152,7 @@ public class Router extends SenderReceiver{
 
 		StringContent content = new StringContent(packet);
 		RoutingKey key = this.routingTable.get(content.getAddress());
+		messagePacket = packet;
 
 		//If router has routing knowledge of how to get to destination, send packet to next router
 		if(key != null){
@@ -183,7 +181,8 @@ public class Router extends SenderReceiver{
 			DatagramPacket pack = request.toDatagramPacket();
 			pack.setSocketAddress(dst);
 			socket.send(packet);
-			
+			receive();
+			continueTransmission(messagePacket);
 		}
 	}
 
