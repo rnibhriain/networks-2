@@ -64,7 +64,7 @@ public class StringContent implements PacketContent {
 	@Override
 	public DatagramPacket toDatagramPacket() {
 
-		byte [] buffer = new byte [address.length+3+message.length];
+		byte [] buffer = new byte [address.length+4+message.length];
 		DatagramPacket packet = null;
 		buffer[0] = PACKET_TYPE_STRING;
 		buffer[1] = hops;
