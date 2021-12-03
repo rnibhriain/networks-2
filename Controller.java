@@ -167,7 +167,7 @@ public class Controller extends SenderReceiver {
 		
 		
 		for (int i = 0; i < list.size(); i++) {
-			if (list.get(i).split(":")[1].equals(str[0])) {
+			if (list.get(i).split(":")[0].equals(str[0])) {
 				current = list.get(i).split(":");
 			}
 			
