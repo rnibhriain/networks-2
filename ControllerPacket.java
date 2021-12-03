@@ -52,7 +52,7 @@ public class ControllerPacket implements PacketContent{
 		// all routers have address type "rx"
 		dstType = 0;
 
-		dstLength = (byte) dst.length();
+		dstLength = dst.length();
 		char [] array = dst.toCharArray();
 		this.dst = new byte [array.length];
 		for (int i = 0; i < dstLength; i++) {

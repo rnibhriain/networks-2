@@ -165,12 +165,14 @@ public class Controller extends SenderReceiver {
 		
 		String [] current = new String[2];
 		
+		
 		for (int i = 0; i < list.size(); i++) {
 			if (list.get(i).split(":")[1].equals(str[0])) {
 				current = list.get(i).split(":");
 			}
 			
 		}	
+		System.out.println(current[0] + current[1]);
 		
 		ControllerPacket pack = new ControllerPacket(current[1], current[0]);
 		DatagramPacket packet = pack.toDatagramPacket();
