@@ -1,16 +1,9 @@
-import java.io.ByteArrayInputStream;
-import java.io.ObjectInputStream;
 import java.net.DatagramPacket;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 
 public class StringContent implements PacketContent {
 	
 	byte type;
-	byte length;
+	byte dstType;
 	byte hops;
 	byte [] address;
 	byte addressLength;
@@ -18,12 +11,14 @@ public class StringContent implements PacketContent {
 
 	public StringContent(DatagramPacket packet) {
 		byte [] buffer = packet.getData();
-		type = buffer[1];
-		addressLength = buffer[2];
+		type = buffer[0];
+		hops = buffer[1];
+		dstType = buffer[2];
+		addressLength = buffer[3];
 		address = new byte [addressLength];
-		message = new byte[buffer.length-(addressLength+3)];
-		System.arraycopy(buffer, 3, address, 0, addressLength);
-		System.arraycopy(buffer, 3+addressLength, message, 0, buffer.length-(addressLength+3));
+		message = new byte[buffer.length-(addressLength+4)];
+		System.arraycopy(buffer, 4, address, 0, addressLength);
+		System.arraycopy(buffer, 4+addressLength, message, 0, buffer.length-(addressLength+4));
 	}
 	
 	public StringContent (String address, String message) {
@@ -72,14 +67,15 @@ public class StringContent implements PacketContent {
 		byte [] buffer = new byte [address.length+3+message.length];
 		DatagramPacket packet = null;
 		buffer[0] = PACKET_TYPE_STRING;
-		buffer[1] = type;
-		buffer[2] = addressLength;
+		buffer[1] = hops;
+		buffer[2] = dstType;
+		buffer[3] = addressLength;
 		
 		// copies in the address
-		System.arraycopy(address, 0, buffer, 3, addressLength);
+		System.arraycopy(address, 0, buffer, 4, addressLength);
 		
 		// copies in the message
-		System.arraycopy(message, 0, buffer, 3+addressLength, message.length);
+		System.arraycopy(message, 0, buffer, 4+addressLength, message.length);
 		
 		packet = new DatagramPacket(buffer, buffer.length);
 		
