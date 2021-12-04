@@ -27,6 +27,8 @@ public class Router extends SenderReceiver{
 
 	private int port = DEFAULT_PORT;
 	static final String CONTROLLER_NODE = "Controller";
+	
+	boolean  packetToSend = false;
 
 	private String node;
 
@@ -119,6 +121,10 @@ public class Router extends SenderReceiver{
 		}
 		
 		System.out.println("\nWaiting for contact at router(" + this.node + ")...");
+		
+		if(!packetToSend) {
+			receive();
+		}
 
 	}
 
@@ -156,7 +162,9 @@ public class Router extends SenderReceiver{
 			DatagramPacket pack = request.toDatagramPacket();
 			pack.setSocketAddress(dst);
 			socket.send(pack);
+			packetToSend = true;
 			receive();
+			packetToSend = false;
 			continueTransmission(messagePacket);
 		}
 		receive();
