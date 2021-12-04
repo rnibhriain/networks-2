@@ -159,6 +159,7 @@ public class Controller extends SenderReceiver {
 	
 	public void sendUpdate (String update) {
 		String [] str = update.split(":");
+		System.out.println(update);
 		
 		// get list for router
 		ArrayList <String> list = networkList.get(str[1]);
@@ -167,6 +168,7 @@ public class Controller extends SenderReceiver {
 		
 		
 		for (int i = 0; i < list.size(); i++) {
+			System.out.println(list.get(i));
 			if (list.get(i).split(":")[0].equals(str[0])) {
 				current = list.get(i).split(":");
 			}
