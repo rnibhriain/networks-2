@@ -56,29 +56,6 @@ public class Router extends SenderReceiver{
 		System.out.println("\nWaiting for contact at router(" + this.node + ")...");
 	}
 
-	public void send (String message) {
-		InetSocketAddress dstAddress = new InetSocketAddress("controller", 51510);
-		message += ":" + this.node;
-		DatagramPacket packet = null;
-		ObjectOutputStream ostream;
-		ByteArrayOutputStream bstream;
-		byte[] buffer = null;
-		try {
-			bstream= new ByteArrayOutputStream();
-			ostream= new ObjectOutputStream(bstream);
-			ostream.writeUTF(message);
-			ostream.flush();
-			buffer= bstream.toByteArray();
-			packet = new DatagramPacket(buffer, buffer.length);
-			packet.setSocketAddress(dstAddress);
-			socket.send(packet);
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-		} 
-
-	}
-
 	public void initialiseRoutingMap() {
 
 		System.out.println("\nInitial hello to controller ... from " + this.node);
@@ -143,8 +120,6 @@ public class Router extends SenderReceiver{
 		
 		System.out.println("\nWaiting for contact at router(" + this.node + ")...");
 
-		receive();
-
 	}
 
 	public void continueTransmission(DatagramPacket packet) throws IOException, InterruptedException {
@@ -184,6 +159,7 @@ public class Router extends SenderReceiver{
 			receive();
 			continueTransmission(messagePacket);
 		}
+		receive();
 	}
 
 	public void printRoutingMap() {
